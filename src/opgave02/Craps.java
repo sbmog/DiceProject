@@ -23,10 +23,9 @@ public class Craps {
         } else if (sum == 2 || sum == 3 || sum == 12) {
             System.out.println("Øv! Du har tabt.");
         } else {
-            int point = sum;
             System.out.println("Din sum er nu dine point");
             System.out.println();
-            boolean win = rollForPoint(point);
+            boolean win = rollForPoint(sum);
 
             if (win) {
                 System.out.println("Tillykke! Du har ramt dit point og vundet.");

@@ -6,6 +6,8 @@ public class Pigs {
     private static int totalRolls = 0;
     private static int player1Rounds = 0;
     private static int player2Rounds = 0;
+    private static int player1Score = 0;
+    private static int player2Score = 0;
 
     public static void main(String[] args) {
         System.out.println("Velkommen til spillet Pigs.");
@@ -22,8 +24,6 @@ public class Pigs {
         Scanner input = new Scanner(System.in);
         System.out.println("Indtast det antal point, der ønskes at spilles til. F.eks. 100:");
         int winningScore = input.nextInt();
-        int player1Score = 0;
-        int player2Score = 0;
         boolean player1Turn = true;
 
         //Skifter mellem spilleren og giver besked ift. udfaldet.
@@ -32,27 +32,12 @@ public class Pigs {
             if (player1Turn) {
                 System.out.println("Spiller 1's tur");
                 player1Rounds++;
-                int roundScore = playOneRoundWithTwoDice(player1Score, player2Score);
-                //Hvis spiller kommer over vinderpoint
-
-                if (player1Score + roundScore > winningScore) {
-                    System.out.println("Spiller 1 overskred det samlede antal point. Runden slutter, og spilleren fik ingen point for runden");
-                } else {
-                    player1Score += roundScore;
-                }
-                System.out.println("Spiller 1'samlese point: " + player1Score);
+                playerPlaysARound(player1Score, winningScore);
 
             } else {
                 System.out.println("Spiller 2's tur");
                 player2Rounds++;
-                int roundScore = playOneRoundWithTwoDice(player1Score, player2Score);
-
-                if (player2Score + roundScore > winningScore) {
-                    System.out.println("Spiller 2 overskred det samlede antal point. Runden slutter, og spilleren fik ingen point for runden");
-                } else {
-                    player2Score += roundScore;
-                }
-                System.out.println("Spiller 2' samlede point: " + player2Score);
+                playerPlaysARound(player2Score, winningScore);
             }
             player1Turn = !player1Turn;
         }
@@ -67,7 +52,19 @@ public class Pigs {
     }
 
 
-    private static int playOneRoundWithTwoDice(int player1Score, int player2Score) {
+    public static void playerPlaysARound(int thePlayerPlaying, int winningScore) {
+        int roundScore = playOneRoundWithTwoDice();
+        //Hvis spiller kommer over vinderpoint
+
+        if (thePlayerPlaying + roundScore > winningScore) {
+            System.out.println("Spilleren overskred det samlede antal point. Runden slutter, og spilleren fik ingen point for runden");
+        } else {
+            thePlayerPlaying += roundScore;
+        }
+        System.out.println("Spillerens samlede point: " + thePlayerPlaying);
+    }
+
+    private static int playOneRoundWithTwoDice() {
         Scanner input = new Scanner(System.in);
         int sumForThisRound = 0;
         boolean continueRolling = true;
@@ -76,7 +73,7 @@ public class Pigs {
             System.out.println("Rul en terning? ('ja/nej')");
             String answer = input.nextLine();
             if (answer.equals("nej")) {
-                break;
+                return sumForThisRound;
             }
             int[] face = rollTwoDice();
             totalRolls++;
@@ -89,12 +86,10 @@ public class Pigs {
                 } else {
                     player2Score = 0;
                 }
-                sumForThisRound = 0;
-                break;
+                return sumForThisRound = 0;
             } else if (face[0] == 1 || face[1] == 1) {
                 System.out.println("Du rulle en 1'er! Ingen point for denne runde.");
-                sumForThisRound = 0;
-                break;
+                return sumForThisRound = 0;
             } else {
                 sumForThisRound += face[0] + face[1];
                 System.out.println("Rundens point: " + sumForThisRound);
